@@ -1,0 +1,253 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "sujy123456/lunasieve"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn apply_allowlist(String, Array[Finding], Array[AllowRule]) -> Array[Finding]
+
+pub fn batch_to_sarif(BatchResult) -> String
+
+pub fn batch_to_text(BatchResult) -> String
+
+pub fn builtin_key_patterns() -> Array[KeyPattern]
+
+pub fn builtin_prefix_patterns() -> Array[PrefixPattern]
+
+pub fn filter_new_findings(Array[DocumentFinding], Array[String]) -> Array[DocumentFinding]
+
+pub fn find(String) -> Array[Finding]
+
+pub fn findings_to_json(Array[Finding]) -> String
+
+pub fn locate(String, Int) -> SourceLocation
+
+pub fn locate_findings(String, Array[Finding]) -> Array[LocatedFinding]
+
+pub fn located_findings_to_text(Array[LocatedFinding]) -> String
+
+pub fn redact(String, Array[Finding], policy? : Policy) -> String
+
+pub fn redact_text(String) -> String
+
+pub fn scan(String) -> ScanResult
+
+pub fn scan_documents(Array[Document], scanner? : Scanner, allowlist? : Array[AllowRule]) -> BatchResult
+
+pub fn summarize(Array[Finding]) -> FindingSummary
+
+// Errors
+
+// Types and methods
+pub(all) struct AllowRule {
+  detector_id : String?
+  exact_value : String?
+  line_contains : String?
+  reason : String
+} derive(Eq, @debug.Debug)
+pub fn AllowRule::new(detector_id? : String, exact_value? : String, line_contains? : String, reason? : String) -> Self
+
+pub(all) struct BatchResult {
+  findings : Array[DocumentFinding]
+  summary : BatchSummary
+} derive(Eq, @debug.Debug)
+
+pub(all) struct BatchSummary {
+  documents : Int
+  bytes : Int
+  findings : Int
+  critical : Int
+  high : Int
+  medium : Int
+  low : Int
+  info : Int
+  by_detector : Array[DetectorCount]
+} derive(Eq, @debug.Debug)
+
+pub(all) enum BoundaryMode {
+  Anywhere
+  Word
+  Line
+} derive(Eq, @debug.Debug)
+
+pub(all) struct DetectorCount {
+  detector_id : String
+  count : Int
+} derive(Eq, @debug.Debug)
+
+pub(all) enum DetectorKind {
+  Prefix
+  Email
+  Phone
+  Identity
+  BankCard
+  IPv4
+  Jwt
+  HighEntropy
+  Custom
+} derive(Eq, @debug.Debug)
+pub fn DetectorKind::name(Self) -> String
+
+pub(all) struct Document {
+  path : String
+  content : String
+} derive(Eq, @debug.Debug)
+pub fn Document::new(String, String) -> Self
+
+pub(all) struct DocumentFinding {
+  path : String
+  finding : Finding
+  start : SourceLocation
+  end : SourceLocation
+  fingerprint : String
+} derive(Eq, @debug.Debug)
+
+pub(all) struct Finding {
+  detector_id : String
+  kind : DetectorKind
+  severity : Severity
+  span : Span
+  confidence : Int
+  preview : String
+  message : String
+} derive(Eq, @debug.Debug)
+pub fn Finding::new(String, DetectorKind, Severity, Int, Int, Int, String, String) -> Self
+
+pub(all) struct FindingSummary {
+  total : Int
+  critical : Int
+  high : Int
+  medium : Int
+  low : Int
+  info : Int
+} derive(Eq, @debug.Debug)
+
+pub(all) struct KeyPattern {
+  id : String
+  key : String
+  severity : Severity
+  minimum_length : Int
+  message : String
+} derive(Eq, @debug.Debug)
+pub fn KeyPattern::new(String, String, Severity, minimum_length? : Int, message? : String) -> Self
+
+pub(all) struct LiteralRule {
+  id : String
+  literal : String
+  case_sensitive : Bool
+  boundary : BoundaryMode
+  severity : Severity
+  message : String
+} derive(Eq, @debug.Debug)
+pub fn LiteralRule::new(String, String, severity? : Severity, case_sensitive? : Bool, boundary? : BoundaryMode, message? : String) -> Self
+
+pub(all) struct LiteralScanner {
+  rules : Array[LiteralRule]
+  include_preview : Bool
+} derive(Eq, @debug.Debug)
+pub fn LiteralScanner::find(Self, String) -> Array[Finding]
+pub fn LiteralScanner::new(Array[LiteralRule], include_preview? : Bool) -> Self
+pub fn LiteralScanner::redact(Self, String, policy? : Policy) -> String
+
+pub(all) struct LocatedFinding {
+  finding : Finding
+  start : SourceLocation
+  end : SourceLocation
+} derive(Eq, @debug.Debug)
+
+pub(all) struct Policy {
+  rules : Array[Rule]
+  fallback : RedactionAction
+} derive(Eq, @debug.Debug)
+pub fn Policy::new(Array[Rule], fallback? : RedactionAction) -> Self
+pub fn Policy::secure_default() -> Self
+
+pub(all) struct PrefixPattern {
+  id : String
+  prefix : String
+  minimum_tail : Int
+  maximum_tail : Int
+  severity : Severity
+  message : String
+} derive(Eq, @debug.Debug)
+pub fn PrefixPattern::new(String, String, Int, Int, Severity, String) -> Self
+
+pub(all) enum RedactionAction {
+  Mask(fill~ : Char, keep_start~ : Int, keep_end~ : Int)
+  Replace(String)
+  Drop
+  Hash
+} derive(Eq, @debug.Debug)
+
+pub(all) struct Rule {
+  detector_id : String
+  minimum_severity : Severity
+  action : RedactionAction
+  enabled : Bool
+} derive(Eq, @debug.Debug)
+pub fn Rule::new(String, RedactionAction, minimum_severity? : Severity, enabled? : Bool) -> Self
+
+pub(all) struct ScanOptions {
+  detect_entropy : Bool
+  minimum_entropy_length : Int
+  entropy_threshold_milli : Int
+  include_preview : Bool
+  merge_overlaps : Bool
+} derive(Eq, @debug.Debug)
+pub fn ScanOptions::default() -> Self
+
+pub(all) struct ScanResult {
+  input_length : Int
+  findings : Array[Finding]
+  redacted : String
+} derive(Eq, @debug.Debug)
+
+pub(all) struct Scanner {
+  options : ScanOptions
+  policy : Policy
+}
+pub fn Scanner::find(Self, String) -> Array[Finding]
+pub fn Scanner::new(options? : ScanOptions, policy? : Policy) -> Self
+pub fn Scanner::scan(Self, String) -> ScanResult
+
+pub(all) enum Severity {
+  Info
+  Low
+  Medium
+  High
+  Critical
+} derive(Eq, @debug.Debug)
+pub fn Severity::name(Self) -> String
+pub fn Severity::rank(Self) -> Int
+
+pub(all) struct SourceLocation {
+  offset : Int
+  line : Int
+  column : Int
+} derive(Eq, @debug.Debug)
+
+pub(all) struct Span {
+  start : Int
+  end : Int
+} derive(Eq, @debug.Debug)
+pub fn Span::length(Self) -> Int
+pub fn Span::new(Int, Int) -> Self raise
+pub fn Span::overlaps(Self, Self) -> Bool
+
+pub(all) struct StreamScanner {
+  scanner : Scanner
+  overlap : Int
+  mut pending : String
+  mut absolute_offset : Int
+  mut finished : Bool
+}
+pub fn StreamScanner::buffered_bytes(Self) -> Int
+pub fn StreamScanner::finish(Self) -> Array[Finding] raise
+pub fn StreamScanner::new(scanner? : Scanner, overlap? : Int) -> Self
+pub fn StreamScanner::push(Self, String) -> Array[Finding] raise
+
+// Type aliases
+
+// Traits

@@ -36,7 +36,8 @@ import {
 ```moonbit nocheck
 ///|
 fn main {
-  let input = "user=alice@example.com token=" + "ghp_" +
+  let input = "user=alice@example.com token=" +
+    "ghp_" +
     "abcdefghijklmnopqrstuvwxyz0123456789"
   let result = @lunasieve.scan(input)
   println("findings: \{result.findings.length()}")

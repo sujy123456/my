@@ -1,0 +1,5 @@
+import {
+  "sujy123456/lunasieve",
+}
+
+pkgtype(kind: "executable")

@@ -9,7 +9,7 @@ pub fn Scanner::new(
   options? : ScanOptions = ScanOptions::default(),
   policy? : Policy = Policy::secure_default(),
 ) -> Scanner {
-  { options, policy }
+  { options, policy, }
 }
 
 ///|

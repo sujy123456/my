@@ -68,7 +68,7 @@ pub fn Span::new(start : Int, end : Int) -> Span raise {
   if start < 0 || end < start {
     fail("invalid span")
   }
-  { start, end }
+  { start, end, }
 }
 
 ///|
@@ -116,7 +116,7 @@ pub fn Finding::new(
     detector_id,
     kind,
     severity,
-    span: { start: safe_start, end: safe_end },
+    span: { start: safe_start, end: safe_end, },
     confidence: bounded,
     preview,
     message,
@@ -146,7 +146,7 @@ pub fn Rule::new(
   minimum_severity? : Severity = Info,
   enabled? : Bool = true,
 ) -> Rule {
-  { detector_id, minimum_severity, action, enabled }
+  { detector_id, minimum_severity, action, enabled, }
 }
 
 ///|

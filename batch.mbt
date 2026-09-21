@@ -6,7 +6,7 @@ pub(all) struct Document {
 
 ///|
 pub fn Document::new(path : String, content : String) -> Document {
-  { path, content }
+  { path, content, }
 }
 
 ///|
@@ -95,7 +95,7 @@ fn detector_counts(findings : Array[DocumentFinding]) -> Array[DetectorCount] {
     counts[item.finding.detector_id] = current + 1
   }
   let out : Array[DetectorCount] = []
-  counts.each(fn(key, value) { out.push({ detector_id: key, count: value }) })
+  counts.each(fn(key, value) { out.push({ detector_id: key, count: value, }) })
   out.sort_by(fn(left, right) {
     if left.count != right.count {
       right.count.compare(left.count)
@@ -145,7 +145,7 @@ pub fn scan_documents(
     }
   }
   findings.sort_by(compare_document_findings)
-  { findings, summary: batch_summary(documents, findings) }
+  { findings, summary: batch_summary(documents, findings), }
 }
 
 ///|

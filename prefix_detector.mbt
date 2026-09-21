@@ -17,7 +17,7 @@ pub fn PrefixPattern::new(
   severity : Severity,
   message : String,
 ) -> PrefixPattern {
-  { id, prefix, minimum_tail, maximum_tail, severity, message }
+  { id, prefix, minimum_tail, maximum_tail, severity, message, }
 }
 
 ///|

@@ -24,7 +24,7 @@ pub fn LiteralRule::new(
   boundary? : BoundaryMode = Anywhere,
   message? : String = "Custom sensitive literal",
 ) -> LiteralRule {
-  { id, literal, case_sensitive, boundary, severity, message }
+  { id, literal, case_sensitive, boundary, severity, message, }
 }
 
 ///|
@@ -104,7 +104,7 @@ pub fn LiteralScanner::new(
   rules : Array[LiteralRule],
   include_preview? : Bool = false,
 ) -> LiteralScanner {
-  { rules, include_preview }
+  { rules, include_preview, }
 }
 
 ///|
@@ -183,7 +183,7 @@ pub fn AllowRule::new(
   line_contains? : String,
   reason? : String = "Explicitly allowed",
 ) -> AllowRule {
-  { detector_id, exact_value, line_contains, reason }
+  { detector_id, exact_value, line_contains, reason, }
 }
 
 ///|
@@ -196,7 +196,7 @@ fn line_span_at(chars : Array[Char], position : Int) -> Span {
   while end < chars.length() && chars[end] != '\n' && chars[end] != '\r' {
     end = end + 1
   }
-  { start, end }
+  { start, end, }
 }
 
 ///|
@@ -274,7 +274,7 @@ pub fn locate(text : String, offset : Int) -> SourceLocation {
       column = column + 1
     }
   }
-  { offset: target, line, column }
+  { offset: target, line, column, }
 }
 
 ///|

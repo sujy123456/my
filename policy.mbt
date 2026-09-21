@@ -9,7 +9,7 @@ pub fn Policy::new(
   rules : Array[Rule],
   fallback? : RedactionAction = Replace("[REDACTED]"),
 ) -> Policy {
-  { rules, fallback }
+  { rules, fallback, }
 }
 
 ///|

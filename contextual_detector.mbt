@@ -15,7 +15,7 @@ pub fn KeyPattern::new(
   minimum_length? : Int = 6,
   message? : String = "Sensitive configuration value",
 ) -> KeyPattern {
-  { id, key, severity, minimum_length, message }
+  { id, key, severity, minimum_length, message, }
 }
 
 ///|
@@ -179,7 +179,7 @@ fn find_assignment_separator(chars : Array[Char], position : Int) -> Int {
 fn parse_assignment_value(chars : Array[Char], position : Int) -> Span {
   let mut start = skip_horizontal_space(chars, position)
   if start >= chars.length() {
-    return { start, end: start }
+    return { start, end: start, }
   }
   let quote = if chars[start] == '"' || chars[start] == '\'' {
     chars[start]
@@ -209,7 +209,7 @@ fn parse_assignment_value(chars : Array[Char], position : Int) -> Span {
       end = end - 1
     }
   }
-  { start, end }
+  { start, end, }
 }
 
 ///|

@@ -24,7 +24,7 @@ pub fn summarize(findings : Array[Finding]) -> FindingSummary {
       Info => info = info + 1
     }
   }
-  { total: findings.length(), critical, high, medium, low, info }
+  { total: findings.length(), critical, high, medium, low, info, }
 }
 
 ///|

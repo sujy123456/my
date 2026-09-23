@@ -31,6 +31,13 @@ jobs:
           json=$(moon run cmd/main -- --text "contact=alice@example.com" --json)
           echo "$json" | grep -F '"total":1'
           echo "$json" | grep -F '"detector":"email"'
+          echo "$json" | jq -e '.summary.total == 1 and .findings[0].detector == "email"' > /dev/null
+          redacted=$(moon run cmd/main -- --text "password=demo-secret" --redacted-only)
+          test "$redacted" = 'password=[SECRET]'
+          if echo "$redacted" | grep -F 'demo-secret'; then
+            echo 'Unredacted sample secret appeared in CLI output' >&2
+            exit 1
+          fi
       - name: Build release
         run: moon build --release
       - name: Package dry run

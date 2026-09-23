@@ -4,6 +4,22 @@ LunaSieve 是一个使用 MoonBit 实现的流式敏感信息检测与脱敏引�
 
 [![CI](https://github.com/sujy123456/my/actions/workflows/ci.yml/badge.svg)](https://github.com/sujy123456/my/actions/workflows/ci.yml)
 
+## MVP 已完成
+
+当前仓库已经具备可直接运行的最小产品闭环：输入文本、检测敏感信息、生成脱敏文本并输出审计报告。无需编写代码即可体验：
+
+```bash
+moon run cmd/main -- --text "contact=alice@example.com password=demo-secret"
+```
+
+输出 JSON：
+
+```bash
+moon run cmd/main -- --text "contact=alice@example.com" --json
+```
+
+执行 `moon run cmd/main -- --help` 可查看全部参数。详细验收证据见 [`docs/MVP_ACCEPTANCE.md`](docs/MVP_ACCEPTANCE.md)。示例使用的邮箱和密码均为虚构测试数据，请勿在命令历史中输入真实凭据。
+
 ## 特性
 
 - 31 类常见令牌前缀和 113 条敏感配置键规则。
@@ -14,7 +30,7 @@ LunaSieve 是一个使用 MoonBit 实现的流式敏感信息检测与脱敏引�
 - 自定义字面量规则、边界模式、大小写模式和显式白名单。
 - 多文档扫描、稳定指纹、基线过滤、文本报告和 SARIF 2.1.0 输出。
 - 默认不在 Finding 或报告中保存原始 Secret。
-- 229 项自动化测试；CI 执行格式、检查、测试、Release 构建和打包。
+- 231 项自动化测试；CI 执行格式、检查、测试、MVP 冒烟验证、Release 构建和打包。
 
 ## 安装
 

@@ -18,6 +18,15 @@ moon run cmd/main -- --text "contact=alice@example.com password=demo-secret"
 moon run cmd/main -- --text "contact=alice@example.com" --json
 ```
 
+如果要将净化后的文本传给下游程序，可以只输出脱敏结果：
+
+```bash
+moon run cmd/main -- --text "password=demo-secret" --redacted-only
+# password=[SECRET]
+```
+
+`--redacted-only` 优先于 `--json`；两者同时指定时仅输出脱敏文本。
+
 执行 `moon run cmd/main -- --help` 可查看全部参数。详细验收证据见 [`docs/MVP_ACCEPTANCE.md`](docs/MVP_ACCEPTANCE.md)。示例使用的邮箱和密码均为虚构测试数据，请勿在命令历史中输入真实凭据。
 
 ## 特性
@@ -28,9 +37,9 @@ moon run cmd/main -- --text "contact=alice@example.com" --json
 - 分块流式扫描，能够发现跨 chunk 的敏感信息。
 - 可配置的掩码、替换、删除和稳定哈希脱敏策略。
 - 自定义字面量规则、边界模式、大小写模式和显式白名单。
-- 多文档扫描、稳定指纹、基线过滤、文本报告和 SARIF 2.1.0 输出。
+- 多文档扫描与批量脱敏、稳定指纹、基线过滤、文本报告和 SARIF 2.1.0 输出。
 - 默认不在 Finding 或报告中保存原始 Secret。
-- 231 项自动化测试；CI 执行格式、检查、测试、MVP 冒烟验证、Release 构建和打包。
+- 233 项自动化测试；CI 执行格式、检查、测试、MVP 冒烟验证、Release 构建和打包。
 
 ## 安装
 
@@ -132,9 +141,13 @@ let result = @lunasieve.scan_documents([
 ])
 println(@lunasieve.batch_to_text(result))
 let sarif = @lunasieve.batch_to_sarif(result)
+let safe_documents = @lunasieve.redact_documents([
+  @lunasieve.Document::new("service.env", env_text),
+  @lunasieve.Document::new("application.log", log_text),
+])
 ```
 
-每条结果都包含稳定指纹，`filter_new_findings` 可用来过滤历史基线，适合在 CI 中只阻止新增问题。
+`safe_documents` 保留原有路径和顺序，只替换文档内容中的敏感值。每条扫描结果都包含稳定指纹，`filter_new_findings` 可用来过滤历史基线，适合在 CI 中只阻止新增问题。
 
 ## 安全边界
 
@@ -169,7 +182,7 @@ moon package
 - `policy.mbt`：重叠消解和脱敏策略。
 - `streaming.mbt`：分块流式扫描。
 - `custom_rules.mbt`：自定义规则、白名单和位置。
-- `batch.mbt`：多文档、基线、文本和 SARIF 报告。
+- `batch.mbt`：多文档扫描与脱敏、基线、文本和 SARIF 报告。
 - `docs/ARCHITECTURE.md`：设计与边界。
 
 ## 许可证

@@ -1,5 +1,6 @@
 import {
   "sujy123456/lunasieve",
+  "moonbitlang/core/env",
 }
 
 pkgtype(kind: "executable")

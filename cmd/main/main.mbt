@@ -26,10 +26,12 @@ fn print_help() -> Unit {
       #|  moon run cmd/main
       #|  moon run cmd/main -- --text "email=alice@example.com"
       #|  moon run cmd/main -- --text "password=demo-secret" --json
+      #|  moon run cmd/main -- --text "password=demo-secret" --redacted-only
       #|
       #|Options:
       #|  --text <value>  Text to scan. Without it, a safe demo is used.
       #|  --json          Emit a machine-readable JSON report.
+      #|  --redacted-only Emit only sanitized text for downstream tools.
       #|  --help, -h      Show this help message.
     ),
   )
@@ -47,7 +49,9 @@ fn main {
     None => DEMO_INPUT
   }
   let result = @lunasieve.scan(input)
-  if has_arg(args, "--json") {
+  if has_arg(args, "--redacted-only") {
+    println(result.redacted)
+  } else if has_arg(args, "--json") {
     println(@lunasieve.scan_result_to_json(result))
   } else {
     println(@lunasieve.scan_result_to_text(result))

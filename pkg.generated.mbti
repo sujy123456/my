@@ -30,6 +30,8 @@ pub fn located_findings_to_text(Array[LocatedFinding]) -> String
 
 pub fn redact(String, Array[Finding], policy? : Policy) -> String
 
+pub fn redact_documents(Array[Document], scanner? : Scanner) -> Array[Document]
+
 pub fn redact_text(String) -> String
 
 pub fn scan(String) -> ScanResult

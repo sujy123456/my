@@ -149,6 +149,17 @@ pub fn scan_documents(
 }
 
 ///|
+/// Return redacted copies while preserving each document's path and order.
+pub fn redact_documents(
+  documents : Array[Document],
+  scanner? : Scanner = Scanner::new(),
+) -> Array[Document] {
+  documents.map(fn(document) {
+    Document::new(document.path, scanner.scan(document.content).redacted)
+  })
+}
+
+///|
 pub fn filter_new_findings(
   findings : Array[DocumentFinding],
   known_fingerprints : Array[String],

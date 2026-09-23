@@ -11,6 +11,19 @@ test "batch scans multiple documents" {
 }
 
 ///|
+test "batch redaction keeps document paths and isolates contents" {
+  let redacted = @lunasieve.redact_documents([
+    @lunasieve.Document::new("first.env", "password=first-secret"),
+    @lunasieve.Document::new("second.txt", "ordinary text"),
+  ])
+  assert_eq(redacted.length(), 2)
+  assert_eq(redacted[0].path, "first.env")
+  assert_eq(redacted[0].content, "password=[SECRET]")
+  assert_eq(redacted[1].path, "second.txt")
+  assert_eq(redacted[1].content, "ordinary text")
+}
+
+///|
 test "batch summary severities" {
   let result = @lunasieve.scan_documents([
     @lunasieve.Document::new(

@@ -31,7 +31,7 @@ jobs:
           json=$(moon run cmd/main -- --text "contact=alice@example.com" --json)
           echo "$json" | grep -F '"total":1'
           echo "$json" | grep -F '"detector":"email"'
-          echo "$json" | jq -e '.summary.total == 1 and .findings[0].detector == "email"' > /dev/null
+          echo "$json" | jq -e '.summary.total == 1 and .result.findings[0].detector == "email"' > /dev/null
           redacted=$(moon run cmd/main -- --text "password=demo-secret" --redacted-only)
           test "$redacted" = 'password=[SECRET]'
           if echo "$redacted" | grep -F 'demo-secret'; then

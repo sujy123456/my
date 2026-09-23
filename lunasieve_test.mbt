@@ -15,6 +15,27 @@ fn assert_no_detector(text : String, detector : String) -> Unit raise {
 }
 
 ///|
+test "complete JSON report contains redacted output and summary" {
+  let input = "contact=alice@example.com"
+  let report = @lunasieve.scan_result_to_json(@lunasieve.scan(input))
+  assert_true(report.contains("\"redacted\":\"contact=al************com\""))
+  assert_true(report.contains("\"total\":1"))
+  assert_true(report.contains("\"detector\":\"email\""))
+  assert_false(report.contains("alice@example.com"))
+}
+
+///|
+test "text report demonstrates the scan-to-redaction workflow" {
+  let report = @lunasieve.scan_result_to_text(
+    @lunasieve.scan("phone=13800138000"),
+  )
+  assert_true(report.contains("LunaSieve scan completed"))
+  assert_true(report.contains("findings: 1"))
+  assert_true(report.contains("cn-phone"))
+  assert_false(report.contains("13800138000"))
+}
+
+///|
 test "github personal access token" {
   assert_has_detector(
     "token=" + "ghp_" + "abcdefghijklmnopqrstuvwxyz0123456789",

@@ -36,6 +36,10 @@ pub fn scan(String) -> ScanResult
 
 pub fn scan_documents(Array[Document], scanner? : Scanner, allowlist? : Array[AllowRule]) -> BatchResult
 
+pub fn scan_result_to_json(ScanResult) -> String
+
+pub fn scan_result_to_text(ScanResult) -> String
+
 pub fn summarize(Array[Finding]) -> FindingSummary
 
 // Errors

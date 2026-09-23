@@ -73,3 +73,70 @@ pub fn findings_to_json(findings : Array[Finding]) -> String {
   out.write_string("]}")
   out.to_string()
 }
+
+///|
+/// Serialize the complete scan result without exposing the original input.
+/// The output contains the redacted text, aggregate counts, and findings.
+pub fn scan_result_to_json(result : ScanResult) -> String {
+  let summary = summarize(result.findings)
+  let out = StringBuilder::new()
+  out.write_string("{\"inputLength\":")
+  out.write_string(result.input_length.to_string())
+  out.write_string(",\"redacted\":\"")
+  out.write_string(json_escape(result.redacted))
+  out.write_string("\",\"summary\":{\"total\":")
+  out.write_string(summary.total.to_string())
+  out.write_string(",\"critical\":")
+  out.write_string(summary.critical.to_string())
+  out.write_string(",\"high\":")
+  out.write_string(summary.high.to_string())
+  out.write_string(",\"medium\":")
+  out.write_string(summary.medium.to_string())
+  out.write_string(",\"low\":")
+  out.write_string(summary.low.to_string())
+  out.write_string(",\"info\":")
+  out.write_string(summary.info.to_string())
+  out.write_string("},\"result\":")
+  out.write_string(findings_to_json(result.findings))
+  out.write_char('}')
+  out.to_string()
+}
+
+///|
+/// Render a concise human-readable report for interactive demonstrations.
+pub fn scan_result_to_text(result : ScanResult) -> String {
+  let summary = summarize(result.findings)
+  let out = StringBuilder::new()
+  out.write_string("LunaSieve scan completed\n")
+  out.write_string("input length: ")
+  out.write_string(result.input_length.to_string())
+  out.write_string("\nfindings: ")
+  out.write_string(summary.total.to_string())
+  out.write_string(" (critical=")
+  out.write_string(summary.critical.to_string())
+  out.write_string(", high=")
+  out.write_string(summary.high.to_string())
+  out.write_string(", medium=")
+  out.write_string(summary.medium.to_string())
+  out.write_string(", low=")
+  out.write_string(summary.low.to_string())
+  out.write_string(", info=")
+  out.write_string(summary.info.to_string())
+  out.write_string(")\nredacted: ")
+  out.write_string(result.redacted)
+  out.write_char('\n')
+  for finding in result.findings {
+    out.write_string("- [")
+    out.write_string(finding.severity.name())
+    out.write_string("] ")
+    out.write_string(finding.detector_id)
+    out.write_string(" @ ")
+    out.write_string(finding.span.start.to_string())
+    out.write_char(':')
+    out.write_string(finding.span.end.to_string())
+    out.write_string(" - ")
+    out.write_string(finding.message)
+    out.write_char('\n')
+  }
+  out.to_string()
+}

@@ -33,6 +33,15 @@ generic-password
 moon run cmd/main -- --text "contact=alice@example.com" --json
 ```
 
+仅提取安全文本（适合管道传输）：
+
+```bash
+moon run cmd/main -- --text "password=demo-secret" --redacted-only
+# password=[SECRET]
+```
+
+以上示例全部使用虚构值。不要把真实密钥直接放在命令行参数中；实际集成时应通过 MoonBit API 传入内存中的文本。
+
 ## MVP 验收清单
 
 | 能力 | 验收方式 | 状态 |
@@ -42,8 +51,9 @@ moon run cmd/main -- --text "contact=alice@example.com" --json
 | 自动脱敏 | 默认掩码和固定替换策略 | 已完成 |
 | 人类可读报告 | 显示统计、风险等级、位置和脱敏文本 | 已完成 |
 | JSON 报告 | `--json` 输出完整扫描结果 | 已完成 |
+| 批量脱敏 | `redact_documents` 保留路径和顺序并净化内容 | 已完成 |
 | 隐私保护 | Finding 与报告不保存原始 Secret | 已完成 |
-| 自动化验证 | 231 项测试与 GitHub Actions CI | 已完成 |
+| 自动化验证 | 233 项测试与 GitHub Actions CI；CI 校验 JSON 和脱敏输出 | 已完成 |
 | 发布准备 | `moon package` 可生成 Mooncakes 包 | 已完成 |
 
 ## 验证命令
@@ -59,4 +69,3 @@ moon package
 ## MVP 边界
 
 当前版本定位为可嵌入 MoonBit 应用的检测与脱敏引擎，并提供最小 CLI 演示。目录递归扫描、操作系统文件权限管理和 Web 控制台不属于本次 MVP；这些能力不会影响核心扫描 API 的使用。
-

@@ -22,6 +22,15 @@ jobs:
         run: moon check
       - name: Run tests
         run: moon test
+      - name: Verify MVP workflow
+        run: |
+          output=$(moon run cmd/main -- --text "contact=alice@example.com password=demo-secret")
+          echo "$output"
+          echo "$output" | grep -F "findings: 2"
+          echo "$output" | grep -F "contact=al************com password=[SECRET]"
+          json=$(moon run cmd/main -- --text "contact=alice@example.com" --json)
+          echo "$json" | grep -F '"total":1'
+          echo "$json" | grep -F '"detector":"email"'
       - name: Build release
         run: moon build --release
       - name: Package dry run

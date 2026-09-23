@@ -34,10 +34,22 @@ fn json_escape(text : String) -> String {
     match c {
       '"' => out.write_string("\\\"")
       '\\' => out.write_string("\\\\")
+      '\b' => out.write_string("\\b")
+      '\f' => out.write_string("\\f")
       '\n' => out.write_string("\\n")
       '\r' => out.write_string("\\r")
       '\t' => out.write_string("\\t")
-      _ => out.write_char(c)
+      _ =>
+        if c.to_int() < 0x20 {
+          let code = c.to_int().to_string(radix=16)
+          out.write_string("\\u00")
+          if code.length() == 1 {
+            out.write_char('0')
+          }
+          out.write_string(code)
+        } else {
+          out.write_char(c)
+        }
     }
   }
   out.to_string()

@@ -25,6 +25,14 @@ test "complete JSON report contains redacted output and summary" {
 }
 
 ///|
+test "JSON report escapes all control characters" {
+  let input = "line\u0001\b\f\n\r\tend"
+  let report = @lunasieve.scan_result_to_json(@lunasieve.scan(input))
+  assert_true(report.contains("line\\u0001\\b\\f\\n\\r\\tend"))
+  assert_false(report.contains("\u0001"))
+}
+
+///|
 test "text report demonstrates the scan-to-redaction workflow" {
   let report = @lunasieve.scan_result_to_text(
     @lunasieve.scan("phone=13800138000"),
